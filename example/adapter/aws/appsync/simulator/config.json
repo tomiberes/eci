@@ -1,0 +1,32 @@
+{
+  "schema": {
+    "content": "schemas/schema.gql"
+  },
+  "mappingTemplates": [
+    {
+      "path": "request",
+      "content": "templates/request.vtl"
+    },
+    {
+      "path": "response",
+      "content": "templates/response.vtl"
+    }
+  ],
+  "dataSources": [
+    {
+      "name": "QueryEntityListDataSource",
+      "type": "AWS_LAMBDA",
+      "invoke": ["handlers/get-entity-list.mjs", "handler", true]
+    }
+  ],
+  "resolvers": [
+    {
+      "kind": "UNIT",
+      "typeName": "Query",
+      "fieldName": "getEntityList",
+      "dataSourceName": "QueryEntityListDataSource",
+      "requestMappingTemplateLocation": "request",
+      "responseMappingTemplateLocation": "response"
+    }
+  ]
+}

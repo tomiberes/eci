@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "nodenext",
+    // https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
+    "target": "es2020",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "checkJs": true,
+    // Avoid issue w/ overwrite of JS files.
+    "outDir": "./dist"
+  }
+}

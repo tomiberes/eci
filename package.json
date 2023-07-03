@@ -1,0 +1,44 @@
+{
+  "name": "eci",
+  "version": "0.1.0",
+  "description": "Tools for services development",
+  "author": "Tomas Beres",
+  "files": [
+    "src"
+  ],
+  "main": "src/main.mjs",
+  "bin": {
+    "eci": "src/task/cli.mjs"
+  },
+  "scripts": {
+    "build:bundle:task": "esbuild src/task/main.mjs --banner:js=\"$(cat src/task/banner.mjs)\" --platform=node --format=esm --target=es2020 --bundle --outfile=dist/task.mjs",
+    "build:bundle:worker": "esbuild src/common/invoke-fn-worker.mjs --platform=node --format=esm --target=es2020 --bundle --outfile=dist/common/invoke-fn-worker.mjs",
+    "task": "node --inspect src/task/main.mjs",
+    "types:generate": "tsc src/**/*.mjs --declaration --allowJs --emitDeclarationOnly --outDir dist/types"
+  },
+  "dependencies": {
+    "@aws-amplify/amplify-appsync-simulator": "2.12.4",
+    "@aws-sdk/client-sts": "3.363.0",
+    "@aws-sdk/shared-ini-file-loader": "3.357.0",
+    "constructs": "10.2.69"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.0",
+    "@typescript-eslint/eslint-plugin": "5.61.0",
+    "@typescript-eslint/parser": "5.61.0",
+    "esbuild": "0.18.11",
+    "eslint": "8.44.0",
+    "eslint-config-prettier": "8.8.0",
+    "prettier": "2.8.8",
+    "typescript": "5.1.6"
+  },
+  "overrides": {
+    "@aws-amplify/amplify-appsync-simulator": {
+      "graphql": "^15.8.0"
+    }
+  },
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  }
+}

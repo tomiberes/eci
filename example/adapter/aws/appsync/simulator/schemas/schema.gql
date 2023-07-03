@@ -1,0 +1,25 @@
+type Entity {
+  id: String
+}
+
+type Query {
+  getEntityList(offset: Int, limit: Int): Page
+}
+
+union PageResult = Entity
+
+type Page {
+  edges: [PageEdge]
+  pageInfo: PageInfo
+}
+
+type PageEdge {
+  node: PageResult
+  cursor: Int
+}
+
+type PageInfo {
+  count: Int
+  totalCount: Int
+  hasNextPage: Boolean
+}
