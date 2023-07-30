@@ -2,14 +2,25 @@
 
 Tools for services development
 
-### Name
+### `TaskRunner`
 
-```js
-> "service".split("").reverse().slice(0, 3).join("")
-'eci'
-```
+#### Root CLI API
 
-### Task
+- `-env`
+  - Path string to pecifiy the location of ".env" file, default is invoke pwd
+  - Default "./.env"
+- `-task-dir`
+  - Path string to specify location of `task-*.mjs` files to load and invoke
+  - Default: "./tasks"
+- `-omit-lib`
+  - `true` | `false` - Omit loading tasks included in distribution
+  - Default: `true`
+
+#### Example
+
+### `Task`
+
+#### Command API
 
 ```sh
 npm run task -- \
@@ -40,6 +51,20 @@ npm run task -- \
     -config="./example/adapter/aws/appsync/simulator/config.json"
 ```
 
+### TODO
+
+- Narrow Node.js version
+- Rename "task" to "act"?
+
 ### WIP
 
 - `build:bundle` is an experiment
+
+### Notes
+
+#### Name
+
+```js
+> "service".split("").reverse().slice(0, 3).join("")
+'eci'
+```

@@ -8,7 +8,7 @@ export function setup(Task) {
     async run() {
       const i = new InvokeAwsLambda();
 
-      await i.init(this.flags["event"], this.flags["handler"]);
+      await i.init(this.flags.get("event"), this.flags.get("handler"));
       await i.run();
       await i.stop();
     }

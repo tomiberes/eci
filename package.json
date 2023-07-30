@@ -11,8 +11,8 @@
     "eci": "src/task/cli.mjs"
   },
   "scripts": {
-    "build:bundle:task": "esbuild src/task/main.mjs --banner:js=\"$(cat src/task/banner.mjs)\" --platform=node --format=esm --target=es2020 --bundle --outfile=dist/task.mjs",
-    "build:bundle:worker": "esbuild src/common/invoke-fn-worker.mjs --platform=node --format=esm --target=es2020 --bundle --outfile=dist/common/invoke-fn-worker.mjs",
+    "build:bundle:task": "esbuild src/task/main.mjs --banner:js=\"$(cat src/task/banner.mjs)\" --platform=node --format=esm --target=esnext --bundle --outfile=dist/task.mjs",
+    "build:bundle:worker": "esbuild src/common/worker.mjs --platform=node --format=esm --target=esnext --bundle --outfile=dist/worker.mjs",
     "task": "node --inspect src/task/main.mjs",
     "types:generate": "tsc src/**/*.mjs --declaration --allowJs --emitDeclarationOnly --outDir dist/types"
   },

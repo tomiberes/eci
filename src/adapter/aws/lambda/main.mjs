@@ -20,7 +20,7 @@ export class InvokeAwsLambda extends Spawner {
   };
 
   /**
-   * @type {any}
+   * @type {*}
    */
   event;
   /**

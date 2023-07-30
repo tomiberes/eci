@@ -9,9 +9,9 @@ export function setup(Task) {
       const i = new InvokeAwsAppSyncSimulator();
 
       await i.init(
-        this.flags["http-port"],
-        this.flags["ws-port"],
-        this.flags["config"]
+        this.flags.get("http-port"),
+        this.flags.get("ws-port"),
+        this.flags.get("config")
       );
       await i.run();
       this.jobs.push(...i.jobs);

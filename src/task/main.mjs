@@ -25,26 +25,26 @@ export class Task extends Spawner {
   static Command;
 
   /**
+   * CLI flags after the command scope
+   *
+   * - "dry-run" - Convention to verify the task options
+   *
+   * @type {Map<string, ReturnType<typeof JSON.parse>>}
+   */
+  flags = new Map([["dry-run", false]]);
+  /**
    * Execution priority, lower better, determined by CLI commands order
    *
    * @type {number}
    */
   index;
-  /**
-   * CLI flags after the scope
-   *
-   * - "dry-run" - Convention to verify the task options
-   *
-   * @type {Record<string, ReturnType<typeof JSON.parse>>}
-   */
-  flags = { "dry-run": false };
 
   /**
-   * @param {Record<string, *>} flags
+   * @param {Map<string, ReturnType<typeof JSON.parse>>} flags
    */
-  constructor(flags = {}) {
+  constructor(flags = new Map()) {
     super();
-    this.flags = { ...this.flags, ...flags };
+    this.flags = new Map([...this.flags, ...flags]);
   }
 
   /**
@@ -72,13 +72,18 @@ export class TaskRunner {
   static KeyValSeparator = "=";
   static RegExpLeadingHypens = /^[\s-]+/;
   static RootCommand = "root";
-  static RootFlags = {
+  /**
+   * @TODO Variable value type annotation
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  static RootFlags = new Map([
     // Using path segments
-    env: [".env"],
-    "task-dir": [],
+    ["env", [".env"]],
+    ["task-dir", []],
     // Do not load tasks that are included in the package
-    "omit-lib": false,
-  };
+    ["omit-lib", false],
+  ]);
   static TaskExt = ".mjs";
   static TaskPrefix = "task-";
 
@@ -149,17 +154,17 @@ export class TaskRunner {
         }
       }
 
-      acc[key] = val;
+      acc.set(key, val);
 
       return acc;
-    }, {});
+    }, new Map());
   }
   static options() {
     const commands = TaskRunner.commands(process.argv.slice(2));
-    const flags = {
+    const flags = new Map([
       ...TaskRunner.RootFlags,
       ...TaskRunner.flags(commands.get(TaskRunner.RootCommand)),
-    };
+    ]);
 
     return { commands, flags };
   }
@@ -167,7 +172,7 @@ export class TaskRunner {
     try {
       await fsp.access(filePath, fs.constants.F_OK);
     } catch {
-      return TaskRunner.log("Skip environment setup, no .env file");
+      return TaskRunner.log('Skip environment setup, no ".env" file');
     }
 
     const envFile = await fsp.readFile(filePath);
@@ -198,11 +203,11 @@ export class TaskRunner {
   static async setup() {
     const { commands, flags } = TaskRunner.options();
     const commandKeys = Array.from(commands.keys());
-    const envFilePath = TaskRunner.path(flags.env);
-    const omitLib = flags["omit-lib"];
-    const taskDir = flags["task-dir"];
+    const envFilePath = TaskRunner.path(flags.get("env"));
+    const omitLib = flags.get("omit-lib");
+    const taskDir = flags.get("task-dir");
 
-    TaskRunner.log("Use env file:", envFilePath);
+    TaskRunner.log('Use ".env" file:', envFilePath);
     await TaskRunner.env(envFilePath);
 
     /**
@@ -212,12 +217,19 @@ export class TaskRunner {
     const tasks = [];
 
     if (!omitLib) {
-      TaskRunner.log("Load tasks lib");
-      Tasks.push(
-        ...(await TaskRunner.load(
-          path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "lib")
-        ))
-      );
+      try {
+        const dirPath = path.resolve(
+          path.dirname(url.fileURLToPath(import.meta.url)),
+          "lib"
+        );
+
+        await fsp.access(dirPath, fs.constants.F_OK);
+
+        TaskRunner.log('Load local tasks "lib" dir');
+        Tasks.push(...(await TaskRunner.load(dirPath)));
+      } catch {
+        TaskRunner.log('No local tasks "lib" dir');
+      }
     }
 
     for (const dir of Array.isArray(taskDir) ? taskDir : [taskDir]) {

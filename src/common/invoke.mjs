@@ -86,7 +86,7 @@ export class Invoke {
    * Load function code into the current process realm
    *
    * @param {FnDef} fnDef
-   * @return {Promise<(...args: unknown[]) => any>}
+   * @return {Promise<(...args: unknown[]) => *>}
    */
   async loadFn(fnDef) {
     const { filePath, fnName, debug } = fnDef;

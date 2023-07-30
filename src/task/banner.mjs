@@ -40,8 +40,6 @@
  *         // argv subcommand
  *         static Command = "npm";
  *
- *         // task ordering
- *         index = 0;
  *         // command & flags usage: `task npm -args="ls -g"`
  *         async run(flags) {
  *           this.log(process.env);

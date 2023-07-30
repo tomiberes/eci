@@ -9,7 +9,7 @@ export function setup(Task) {
     static Command = "aws-sam-local";
 
     // @TODO: WIP
-    flags = { "dry-run": true };
+    flags = new Map([["dry-run", true]]);
 
     async run() {
       this.$`sam local invoke --help`;

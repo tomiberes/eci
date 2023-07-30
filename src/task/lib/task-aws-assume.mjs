@@ -19,11 +19,15 @@ export async function setup(Task) {
       await this.assume();
     }
     async init() {
+      if (!this.flags.has("profile")) {
+        throw new Error('Missing "profile" flag');
+      }
+
       const { configFile, credentialsFile } =
         await SharedIniFileLoader.loadSharedConfigFiles();
 
       this.profile =
-        this.flags.profile ?? process.env[TaskAwsAssume.EnvKeys.Profile];
+        this.flags.get("profile") ?? process.env[TaskAwsAssume.EnvKeys.Profile];
       this.configFile = configFile;
       this.credentialsFile = credentialsFile;
       this.client = new STSClient({
