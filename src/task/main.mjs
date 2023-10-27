@@ -1,4 +1,4 @@
-import fs, { promises as fsp } from "node:fs";
+import fsp from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import os from "node:os";
@@ -170,7 +170,7 @@ export class TaskRunner {
   }
   static async env(filePath) {
     try {
-      await fsp.access(filePath, fs.constants.F_OK);
+      await fsp.access(filePath, fsp.constants.F_OK);
     } catch {
       return TaskRunner.log('Skip environment setup, no ".env" file');
     }
@@ -223,7 +223,7 @@ export class TaskRunner {
           "lib"
         );
 
-        await fsp.access(dirPath, fs.constants.F_OK);
+        await fsp.access(dirPath, fsp.constants.F_OK);
 
         TaskRunner.log('Load local tasks "lib" dir');
         Tasks.push(...(await TaskRunner.load(dirPath)));
