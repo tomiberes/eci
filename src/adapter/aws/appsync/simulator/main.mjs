@@ -185,8 +185,10 @@ export class InvokeAwsAppSyncSimulator extends Spawner {
         this.formatJSON(event)
       );
 
-      const res = await handler.run(event);
+      const ctx = {};
+      const res = await handler.run(event, ctx);
 
+      this.log("Handler context:\n", this.formatJSON(ctx));
       this.log("Handler response:\n", this.formatJSON(res));
 
       return res;

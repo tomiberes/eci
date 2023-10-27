@@ -69,11 +69,13 @@ export class InvokeAwsLambda extends Spawner {
    * @TODO AWS Lambda context, plain object is used
    */
   async run() {
+    const ctx = {};
     let res;
 
     // Cannot use callback API when handler is executed in a thread,
     // function cannot be copied
-    res = await this.handler.run(this.event, {});
+    res = await this.handler.run(this.event, ctx);
+    this.log("Handler context:\n", this.formatJSON(ctx));
     this.log("Handler response:\n", this.formatJSON(res));
 
     return res;
